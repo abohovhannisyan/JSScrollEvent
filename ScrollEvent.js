@@ -7,10 +7,11 @@ class ScrollEvent{
   @callback GET function
   */
 	on(selector, callback){
-  	let elem = document.querySelector(selector);
-		let key  = 0;
+        let elem = document.querySelector(selector);
+        if(!elem) return;
+                let key  = 0;
     let verify = 0;
-    document.addEventListener('wheel', function(event){
+    document.addEventListener('scroll', function(event){
       let posY = window.scrollY;
       let elem_posY = elem.offsetTop;
 
@@ -36,13 +37,17 @@ class ScrollEvent{
   */
   direction(direction, callback){
   	
-  	document.addEventListener('wheel', function(event){
-    let dir = (event.deltaY > 0)? 'down' : "up";
-		
+        let lastPos = window.scrollY;
+        document.addEventListener('scroll', function(){
+    let current = window.scrollY;
+    let dir = (current > lastPos)? 'down' : 'up';
+
       if(dir == direction){
         callback();
       }
-    
+
+      lastPos = current;
+
     });
     
   }
